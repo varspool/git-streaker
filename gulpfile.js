@@ -9,6 +9,8 @@ const eslint = require('gulp-eslint');
 const fs = require('fs');
 const gulp = require('gulp');
 const gulpif = require('gulp-if');
+const isparta = require('isparta');
+const istanbul = require('gulp-istanbul');
 const mocha = require('gulp-mocha');
 const path = require('path');
 const pkg = require('./package.json');
@@ -64,7 +66,7 @@ function transform(src, output, transformers, done) {
 
 /* Meta tasks */
 gulp.task('default', sequence('build', ['lint', 'test', 'watch']));
-gulp.task('build', sequence('clean', ['buildBits', 'buildJs', 'buildTest', 'buildFixture', 'buildMan']));
+gulp.task('build', sequence('clean', 'buildBits', ['buildJs', 'buildTest', 'buildFixture', 'buildMan'], 'buildCoverage'));
 
 /* Implementations */
 gulp.task('clean', () => {
@@ -76,18 +78,22 @@ gulp.task('buildBits', (done) => {
     mkdirp('build'),
     mkdirp(config.js.output).then(() => fs.writeFileAsync(path.join(config.js.output, '.empty'), '')),
     mkdirp(config.test.output).then(() => fs.writeFileAsync(path.join(config.test.output, '.empty'), '')),
-    fs.symlinkAsync('../dist', 'node_modules/app', 'dir').catch(err => {}),
-    fs.symlinkAsync('../dist-test', 'node_modules/test', 'dir').catch(err => {}),
   ]).then(() => done());
 });
 
-gulp.task('buildJs', ['buildBits'], () => {
+gulp.task('buildJs', () => {
   return gulp.src(config.js.src)
     .pipe(debug({title: 'buildJs input'}))
     .pipe(gulpif(config.sourcemap, sourcemaps.init()))
     .pipe(babel(config.babel))
     .pipe(gulpif(config.sourcemap, sourcemaps.write('.')))
     .pipe(gulp.dest(config.js.output));
+});
+
+gulp.task('buildCoverage', () => {
+  return gulp.src(config.js.coverage)
+    .pipe(istanbul({instrumenter: isparta.Instrumenter}))
+    .pipe(istanbul.hookRequire())
 });
 
 gulp.task('buildTest', () => {
@@ -132,18 +138,22 @@ gulp.task('lint', () => {
     .pipe(gulpif(config.linting, eslint.format()));
 });
 
-gulp.task('test', () => {
+gulp.task('test', ['buildCoverage'], () => {
   mkdirp('build');
 
   return gulp.src(config.test.tests, {read: false})
     .pipe(mocha({
       ui: 'bdd',
       reporter: 'spec'
+    }))
+    .pipe(istanbul.writeReports({
+      dir: './build',
+      reporters: [ 'lcov' ],
     }));
 });
 
 gulp.task('watch', () => {
-  gulp.watch(config.js.src, ['buildJs', 'lint']);
+  gulp.watch(config.js.src, ['buildJs', 'buildCoverage', 'lint']);
   gulp.watch(config.test.src, ['buildTest']);
   gulp.watch(config.fixture.src, ['buildFixture']);
 });

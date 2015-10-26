@@ -11,6 +11,7 @@ const config = {
   js: {
     src: 'lib/**/*.js',
     output: 'dist',
+    coverage: 'dist/**/*.js',
   },
 
   test: {
