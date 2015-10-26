@@ -1,0 +1,6 @@
+dist/
+dist-test/
+build/
+man/
+node_modules/
+./*.js

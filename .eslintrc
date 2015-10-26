@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "extends": "airbnb",
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": false
+  },
+  "rules": {
+    "strict": [2,
+      "function"
+    ],
+    "key-spacing": [2, {
+      "beforeColon": false,
+      "afterColon": true,
+      "mode": "minimum"
+    }],
+    "new-cap": [2, {
+      "capIsNew": false
+    }],
+    "indent": [2, 2, {
+      "SwitchCase": 1
+    }],
+    "no-unused-vars": [2, {
+      "vars": "local",
+      "args": "after-used",
+      "argsIgnorePattern": "^_.+$",
+      "varsIgnorePattern": "^(_.+|debug)$"
+    }],
+    "id-length": [2, {
+      "exceptions": ["n", "i", "_"]
+    }],
+    "object-curly-spacing": [2, "never"]
+  }
+}

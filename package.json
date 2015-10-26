@@ -1,0 +1,65 @@
+{
+  "name": "git-streaker",
+  "version": "0.0.1",
+  "description": "A revisionist approach to git history, with filter-branch",
+  "preferGlobal": true,
+  "main": "dist/git-streaker.js",
+  "bin": {
+    "git-streaker": "dist/git-streaker.js"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "prepublish": "gulp build",
+    "pretest": "gulp build"
+  },
+  "man": "man/git-streaker.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dominics/git-streaker.git"
+  },
+  "keywords": [
+    "git",
+    "filter-branch",
+    "history"
+  ],
+  "author": "Dominic Scheirlinck <dominic@varspool.com>",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/dominics/git-streaker/issues"
+  },
+  "homepage": "https://github.com/dominics/git-streaker#readme",
+  "dependencies": {
+    "babel-runtime": "^5.8.25",
+    "bluebird": "^2.10.2",
+    "inquirer": "^0.11.0",
+    "lodash": "^3.10.1",
+    "yargs": "^3.27.0"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.3",
+    "chai": "^3.4.0",
+    "del": "^2.0.2",
+    "eslint": "^1.7.3",
+    "eslint-config-airbnb": "^0.1.0",
+    "eslint-plugin-react": "^3.6.3",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.3.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-eslint": "^1.0.0",
+    "gulp-if": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-spawn-mocha": "^2.2.1",
+    "gulp-util": "^3.0.7",
+    "jasmine": "^2.3.2",
+    "mocha": "^2.3.3",
+    "readme-to-man-page": "^0.5.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=4.2.1",
+    "npm": ">=3.3.9"
+  }
+}
