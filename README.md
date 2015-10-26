@@ -41,6 +41,8 @@ git streaker <subcommand> [options] <schedule-file> [-- filter-branch-options...
 You provide a subcommand as the first option.  And with any of the subcommands,
 you also specify the relative path to a 'schedule' file.
 
+You can turn boolean options off with `--no-<option>`.
+
 ## Commands
 
 ### Schedule
@@ -78,18 +80,15 @@ these schedules.
 Usage: git streaker schedule --type=<type> [options] <schedule-out-file>
 
 Options:
-  --verbose, -v  Output more information (provide multiple times for more noise)
-                                                                         [count]
-  -f, --force    Allow overwriting the destination file
-                                                      [boolean] [default: false]
-  --type, -t     The type of schedule to generate [required] [choices: "streak"]
-  --count, -c    The number of commits to generate                [default: 100]
-  --hour         Restrict generated times to these hours                [string]
-  --jitter, -j   Randomly generate minute and second information
-                                                       [boolean] [default: true]
-  --start        A date string describing when to begin the scheduled dates
-                                                                        [string]
-  --help         Show help                                             [boolean]
+  --verbose, -v  Output more information (provide multiple times for more noise)  [count]
+  --quiet, -q    Output less information (provide multiple times for less noise)  [count]
+  -f, --force    Allow overwriting the destination file  [boolean] [default: false]
+  --type, -t     The type of schedule to generate  [required] [choices: "streak"]
+  --count, -c    The number of commits to generate  [required] [default: 1000]
+  --hour         Restrict generated times to these hours  [string]
+  --jitter, -j   Randomly generate minute and second information  [boolean] [default: true]
+  --start, -s    A date string describing when to begin the scheduled dates  [string]
+  --help         Show help  [boolean]
 ```
 
 ### Filter

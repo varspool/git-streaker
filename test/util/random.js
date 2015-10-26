@@ -37,7 +37,7 @@ function testDistribution(n, min, max) {
   });
 }
 
-describe('randInt', function test() {
+describe('randomInt', function test() {
   it('is a function', () => {
     expect(random.randomInt).to.be.a('function');
   });
@@ -45,4 +45,18 @@ describe('randInt', function test() {
   testDistribution(1000, 0, 10);
   testDistribution(10000, 0, 100);
   testDistribution(100000, 0, 999);
+});
+
+describe('randomValue', () => {
+  it('is a function', () => {
+    expect(random.randomValue).to.be.a('function');
+  });
+
+  it('always selects one of the items in an array', () => {
+    for (let i = 0; i < 100; i++) {
+      const value = random.randomValue([4, 5, 6]);
+      expect(value).to.be.a('number');
+      expect(value).to.be.within(4, 6);
+    }
+  });
 });
