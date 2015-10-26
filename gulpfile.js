@@ -1,0 +1,149 @@
+'use strict'; // eslint-disable-line strict
+
+require('babel/register');
+
+const babel = require('gulp-babel');
+const del = require('del');
+const debug = require('gulp-debug');
+const eslint = require('gulp-eslint');
+const fs = require('fs');
+const gulp = require('gulp');
+const gulpif = require('gulp-if');
+const mocha = require('gulp-mocha');
+const path = require('path');
+const pkg = require('./package.json');
+const Promise = require('bluebird');
+const readmeToMan = require('readme-to-man-page');
+const sequence = require('gulp-sequence');
+const sourcemaps = require('gulp-sourcemaps');
+
+Promise.promisifyAll(fs);
+
+/*
+ * Configuration
+ */
+const config = require('./config');
+
+/*
+ * Helpers
+ */
+
+function mkdirp(dir) {
+  return fs.statAsync(dir)
+    .then(stat => {
+      return stat.isDirectory ? Promise.resolve() : Promise.reject(Error('Could not mkdirp: path already exists'));
+    })
+    .catch(err => fs.mkdirAsync(dir));
+}
+
+function transform(src, output, transformers, done) {
+  fs.readFile(src, 'utf8', (readErr, data) => {
+    if (readErr) {
+      return done(readErr);
+    }
+
+    let transformed = data;
+
+    for (const transformer of transformers) {
+      transformed = transformer(transformed);
+    }
+
+    fs.writeFile(output, transformed, (writeErr) => {
+      if (writeErr) {
+        return done(writeErr);
+      }
+
+      return done();
+    });
+  });
+}
+
+/*
+ * Task definitions
+ */
+
+/* Meta tasks */
+gulp.task('default', sequence('build', ['lint', 'test', 'watch']));
+gulp.task('build', sequence('clean', ['buildBits', 'buildJs', 'buildTest', 'buildFixture', 'buildMan']));
+
+/* Implementations */
+gulp.task('clean', () => {
+  return del(config.outputs);
+});
+
+gulp.task('buildBits', (done) => {
+  Promise.all([
+    mkdirp('build'),
+    mkdirp(config.js.output).then(() => fs.writeFileAsync(path.join(config.js.output, '.empty'), '')),
+    mkdirp(config.test.output).then(() => fs.writeFileAsync(path.join(config.test.output, '.empty'), '')),
+    fs.symlinkAsync('../dist', 'node_modules/app', 'dir').catch(err => {}),
+    fs.symlinkAsync('../dist-test', 'node_modules/test', 'dir').catch(err => {}),
+  ]).then(() => done());
+});
+
+gulp.task('buildJs', ['buildBits'], () => {
+  return gulp.src(config.js.src)
+    .pipe(debug({title: 'buildJs input'}))
+    .pipe(gulpif(config.sourcemap, sourcemaps.init()))
+    .pipe(babel(config.babel))
+    .pipe(gulpif(config.sourcemap, sourcemaps.write('.')))
+    .pipe(gulp.dest(config.js.output));
+});
+
+gulp.task('buildTest', () => {
+  return gulp.src(config.test.src)
+    .pipe(debug({title: 'buildTest input'}))
+    .pipe(gulpif(config.sourcemap, sourcemaps.init()))
+    .pipe(babel(config.babel))
+    .pipe(gulpif(config.sourcemap, sourcemaps.write('.')))
+    .pipe(gulp.dest(config.test.output));
+});
+
+gulp.task('buildFixture', () => {
+  return gulp.src(config.fixture.src)
+    .pipe(debug({title: 'buildFixture input'}))
+    .pipe(gulp.dest(config.fixture.output));
+});
+
+gulp.task('buildMan', (done) => {
+  mkdirp('man').then(() => {
+    transform(
+      config.man.src,
+      config.man.output,
+      [
+        (data) => {
+          return readmeToMan(data, {
+            name: pkg.name,
+            version: pkg.version,
+            description: pkg.description,
+            section: 1,
+            manual: `Git Streaker ${pkg.version}`,
+          });
+        },
+      ],
+      done
+    );
+  });
+});
+
+gulp.task('lint', () => {
+  return gulp.src(config.js.src)
+    .pipe(gulpif(config.linting, eslint()))
+    .pipe(gulpif(config.linting, eslint.format()));
+});
+
+gulp.task('test', () => {
+  mkdirp('build');
+
+  return gulp.src(config.test.tests, {read: false})
+    .pipe(mocha({
+      ui: 'bdd',
+      reporter: 'spec'
+    }));
+});
+
+gulp.task('watch', () => {
+  gulp.watch(config.js.src, ['buildJs', 'lint']);
+  gulp.watch(config.test.src, ['buildTest']);
+  gulp.watch(config.fixture.src, ['buildFixture']);
+});
