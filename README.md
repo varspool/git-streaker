@@ -83,7 +83,7 @@ Options:
   --verbose, -v  Output more information (provide multiple times for more noise)  [count]
   --quiet, -q    Output less information (provide multiple times for less noise)  [count]
   -f, --force    Allow overwriting the destination file  [boolean] [default: false]
-  --type, -t     The type of schedule to generate  [required] [choices: "streak"]
+  --type, -t     The type of schedule to generate  [required] [choices: "streak", "interval"]
   --count, -c    The number of commits to generate  [required] [default: 1000]
   --hour         Restrict generated times to these hours  [string]
   --jitter, -j   Randomly generate minute and second information  [boolean] [default: true]
@@ -145,3 +145,8 @@ A schedule is simply a JSON file with a list of date strings. It looks like this
 The format is "anything `new Date("dateString")` understands".  Dates are
 consumed one by one from this file for commit dates, in the order that `git
 filter-branch` walks the commit range you give it.
+
+## Known Limitations
+
+* Timezone information is limited to whatever $TZ says. Would probably need momentjs plus the timezone data to do better,
+  and it'd be awkward.

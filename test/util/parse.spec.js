@@ -1,12 +1,10 @@
-require('babel/register');
-
 import {Log} from './../../dist/util/log';
 import parse from './../../dist/util/parse';
 import {expect} from 'chai';
 
 Log.setFile('build/parse.log');
 
-describe('parse', () => {
+describe('module parse', () => {
   it('exports an object as the default', () => {
     expect(parse).to.be.a('object');
   });

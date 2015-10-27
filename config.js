@@ -1,12 +1,16 @@
 'use strict';
 
-const fs = require('fs');
+const path = require('path');
 const debug = process.env.NODE_ENV === 'development';
 
 const config = {
   debug: debug,
   sourcemap: debug,
   linting: debug,
+
+  build: {
+    output: path.join(__dirname, 'build'),
+  },
 
   js: {
     src: 'lib/**/*.js',
@@ -17,7 +21,7 @@ const config = {
   test: {
     src: ['test/**/*.js', '!test/fixture/**/*'],
     output: 'dist-test',
-    tests: 'dist-test/**/*.js',
+    tests: 'dist-test/**/*.spec.js',
   },
 
   fixture: {
@@ -41,6 +45,7 @@ config.outputs = [
   config.js.output,
   config.test.output,
   config.man.output,
+  config.build.output,
 ];
 
 module.exports = config;

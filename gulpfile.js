@@ -34,7 +34,8 @@ function mkdirp(dir) {
     .then(stat => {
       return stat.isDirectory ? Promise.resolve() : Promise.reject(Error('Could not mkdirp: path already exists'));
     })
-    .catch(err => fs.mkdirAsync(dir));
+    .catch(err => fs.mkdirAsync(dir))
+    .catch(err => { if (err.errno !== -17) throw err; /* already created */ });
 }
 
 function transform(src, output, transformers, done) {
@@ -129,15 +130,18 @@ gulp.task('lint', () => {
 });
 
 gulp.task('test', ['buildCoverage'], () => {
-  mkdirp('build');
+  mkdirp(config.build.output);
 
   return gulp.src(config.test.tests, {read: false})
     .pipe(mocha({
       ui: 'bdd',
-      reporter: 'spec'
+      reporter: 'spec',
+      require: [
+        './dist-test/bootstrap.js'
+      ]
     }))
     .pipe(istanbul.writeReports({
-      dir: './build',
+      dir: config.build.output,
       reporters: [ 'lcov' ],
     }));
 });
