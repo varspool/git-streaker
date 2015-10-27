@@ -1,8 +1,8 @@
-import random from 'app/util/random';
+import random from './../../dist/util/random';
 import {expect} from 'chai';
 
 function testDistribution(n, min, max) {
-  describe(`when you generate ${n} integers between ${min} and ${max}`, function() {
+  describe(`when you generate ${n} integers between ${min} and ${max}`, function testGenerated() {
     this.slow(10000);
     this.timeout(20000);
 

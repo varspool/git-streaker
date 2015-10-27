@@ -1,7 +1,7 @@
 require('babel/register');
 
-import {Log} from 'app/util/log';
-import parse from 'app/util/parse';
+import {Log} from './../../dist/util/log';
+import parse from './../../dist/util/parse';
 import {expect} from 'chai';
 
 Log.setFile('build/parse.log');

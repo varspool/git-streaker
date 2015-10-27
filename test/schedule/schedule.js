@@ -1,4 +1,4 @@
-import Schedule from 'app/schedule/schedule';
+import Schedule from './../../dist/schedule/schedule';
 import {expect} from 'chai';
 
 describe('Schedule abstract base class', () => {

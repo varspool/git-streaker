@@ -4,7 +4,6 @@ require('babel/register');
 
 const babel = require('gulp-babel');
 const del = require('del');
-const debug = require('gulp-debug');
 const eslint = require('gulp-eslint');
 const fs = require('fs');
 const gulp = require('gulp');
@@ -66,24 +65,17 @@ function transform(src, output, transformers, done) {
 
 /* Meta tasks */
 gulp.task('default', sequence('build', ['lint', 'test', 'watch']));
-gulp.task('build', sequence('clean', 'buildBits', ['buildJs', 'buildTest', 'buildFixture', 'buildMan'], 'buildCoverage'));
+gulp.task('build', sequence('clean', ['buildLib', 'buildTest', 'buildFixture', 'buildMan']));
+gulp.task('buildLib', sequence('buildJs', 'buildCoverage'));
+
 
 /* Implementations */
 gulp.task('clean', () => {
   return del(config.outputs);
 });
 
-gulp.task('buildBits', (done) => {
-  Promise.all([
-    mkdirp('build'),
-    mkdirp(config.js.output).then(() => fs.writeFileAsync(path.join(config.js.output, '.empty'), '')),
-    mkdirp(config.test.output).then(() => fs.writeFileAsync(path.join(config.test.output, '.empty'), '')),
-  ]).then(() => done());
-});
-
 gulp.task('buildJs', () => {
   return gulp.src(config.js.src)
-    .pipe(debug({title: 'buildJs input'}))
     .pipe(gulpif(config.sourcemap, sourcemaps.init()))
     .pipe(babel(config.babel))
     .pipe(gulpif(config.sourcemap, sourcemaps.write('.')))
@@ -98,7 +90,6 @@ gulp.task('buildCoverage', () => {
 
 gulp.task('buildTest', () => {
   return gulp.src(config.test.src)
-    .pipe(debug({title: 'buildTest input'}))
     .pipe(gulpif(config.sourcemap, sourcemaps.init()))
     .pipe(babel(config.babel))
     .pipe(gulpif(config.sourcemap, sourcemaps.write('.')))
@@ -107,7 +98,6 @@ gulp.task('buildTest', () => {
 
 gulp.task('buildFixture', () => {
   return gulp.src(config.fixture.src)
-    .pipe(debug({title: 'buildFixture input'}))
     .pipe(gulp.dest(config.fixture.output));
 });
 
