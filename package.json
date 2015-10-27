@@ -7,11 +7,6 @@
   "bin": {
     "git-streaker": "dist/git-streaker.js"
   },
-  "scripts": {
-    "test": "gulp test",
-    "prepublish": "gulp build",
-    "pretest": "gulp build"
-  },
   "man": "man/git-streaker.1",
   "repository": {
     "type": "git",
@@ -28,6 +23,13 @@
     "url": "https://github.com/dominics/git-streaker/issues"
   },
   "homepage": "https://github.com/dominics/git-streaker#readme",
+  "scripts": {
+    "pretest": "npm run build",
+    "prepublish": "npm test",
+    "preversion": "npm test",
+    "build": "gulp build",
+    "test": "gulp test"
+  },
   "dependencies": {
     "babel-runtime": "^5.8.25",
     "bluebird": "^2.10.2",
