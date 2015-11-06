@@ -2,6 +2,9 @@
 
 > A revisionist approach to git history.
 
+[![Build Status](https://travis-ci.org/varspool/git-streaker.svg?branch=master)](https://travis-ci.org/varspool/git-streaker)
+[![Coverage Status](https://coveralls.io/repos/varspool/git-streaker/badge.svg?branch=master&service=github)](https://coveralls.io/github/varspool/git-streaker?branch=master)
+
 git-streaker gives you a flexible way to rewrite commit dates and times in git
 repositories.  It's a glorified `--env-filter` for `git filter-branch`, one
 that lets you specify a sequence of dates to use for the rewritten commits.
