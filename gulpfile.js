@@ -137,11 +137,11 @@ gulp.task('test', ['buildCoverage'], () => {
       ui: 'bdd',
       reporter: 'spec',
       require: [
-        './dist-test/bootstrap.js'
+        config.test.bootstrap
       ]
     }))
     .pipe(istanbul.writeReports({
-      dir: config.build.output,
+      dir: config.build.lcovOutput,
       reporters: [ 'lcov' ],
     }));
 });

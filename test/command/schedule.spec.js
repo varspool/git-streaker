@@ -1,10 +1,8 @@
 import schedule from './../../dist/command/schedule';
-import config from '../../config';
 import fs from 'fs';
+import _outfile from './../util/outfile';
 
-function out(ident) {
-  return config.build.output + '/schedule-' + ident + '-' + ((new Date()).getTime()) + '.json';
-}
+const outfile = _outfile.bind(undefined, 'command', 'schedule');
 
 function args(file, merge) {
   return Object.assign({
@@ -27,10 +25,10 @@ describe('Schedule command', () => {
     boolFalse: [false],
     emptyObj: [{}],
     noArgs: [],
-    validPathNoType: [args(out('validPathNoType'), {
+    validPathNoType: [args(outfile('command', 'schedule', 'validPathNoType'), {
       type: null,
     })],
-    validPathInvalidType: [args(out('validPathNoType'), {
+    validPathInvalidType: [args(outfile('validPathNoType'), {
       type: 'craziness',
     })],
   };
@@ -48,15 +46,19 @@ describe('Schedule command', () => {
       jitter: true,
       hour:   '3-9,3',
     },
+    'emptyHour': {
+      jitter: true,
+      hour:   '',
+    },
   };
 
   Object.keys(fulfillments).forEach((key) => {
     it('works correctly with normal arguments, outputs json: ' + key, () => {
-      const outFile = out(key);
-      const argv = args(outFile, fulfillments[key]);
+      const out = outfile(key);
+      const argv = args(out, fulfillments[key]);
 
       return expect(schedule(argv)).to.be.fulfilled.then(() => {
-        const result = JSON.parse(fs.readFileSync(outFile, 'utf-8'));
+        const result = JSON.parse(fs.readFileSync(out, 'utf-8'));
         expect(result).to.be.a('object').and.hasOwnProperty('schedule');
       });
     });

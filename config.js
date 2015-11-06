@@ -2,6 +2,7 @@
 
 const path = require('path');
 const debug = process.env.NODE_ENV === 'development';
+const output = path.join(__dirname, 'build');
 
 const config = {
   debug: debug,
@@ -9,7 +10,7 @@ const config = {
   linting: debug,
 
   build: {
-    output: path.join(__dirname, 'build'),
+    output: output
   },
 
   js: {
@@ -22,6 +23,7 @@ const config = {
     src: ['test/**/*.js', '!test/fixture/**/*'],
     output: 'dist-test',
     tests: 'dist-test/**/*.spec.js',
+    bootstrap: './dist-test/bootstrap.js',
   },
 
   fixture: {
