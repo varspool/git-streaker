@@ -42,9 +42,15 @@ describe('Schedule command', () => {
 
   const fulfillments = {
     'defaults': {},
-    'jitterAndHour': {
+    'features': {
+      type: 'streak',
       jitter: true,
-      hour:   '3-9,3',
+      hour:   '3-9,12',
+    },
+    'streak': {
+      type: 'streak',
+      jitter: true,
+      hour: '22-23,1-9',
     },
     'emptyHour': {
       jitter: true,

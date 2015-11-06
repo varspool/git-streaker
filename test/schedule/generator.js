@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import {randomInt} from './../../dist/util/random';
 
 export default (Generator) => {
   describe('is a generator, and requires an argv object to be passed to its constructor', () => {
@@ -8,17 +9,23 @@ export default (Generator) => {
   });
 
   describe('is a generator, and has methods for manipulating dates', () => {
-    describe('._jitter()', () => {
+    describe('.jitter()', () => {
       it('is a function', () => {
         const sut = new Generator({});
-        expect(sut._jitter).to.be.a('function');
+        expect(sut.jitter).to.be.a('function');
       });
-    });
 
-    describe('._mappers()', () => {
-      it('is a function', () => {
+      it('always returns a new date, later than the one passed in', () => {
         const sut = new Generator({});
-        expect(sut._mappers).to.be.a('function');
+
+        for (let i = 0; i < 20; i++) {
+          const date = new Date(randomInt(0, (new Date()).getTime()));
+          const later = sut.jitter(date);
+
+          expect(later)
+            .to.be.an.instanceof(Date)
+            .and.to.be.gt(date);
+        }
       });
     });
 
@@ -28,12 +35,14 @@ export default (Generator) => {
         expect(sut._date).to.be.a('function');
       });
 
-      it('returns a incrementing non-mutated dates', () => {
+      it('returns a different, and greater, date', () => {
         const sut = new Generator({});
         const previous = new Date();
+
+        // 1 because of special 'start point' behaviour
         const current = sut._date(previous, 1);
-        expect(current, 'new date object').to.be.not.equal(previous);
-        expect(current.getTime(), 'new date object time').to.be.gt(previous.getTime());
+
+        expect(current).to.be.gt(previous);
       });
     });
 
@@ -41,13 +50,6 @@ export default (Generator) => {
       it('is a function', () => {
         const sut = new Generator({});
         expect(sut.generate).to.be.a('function');
-      });
-    });
-
-    describe('._applyMappers()', () => {
-      it('is a function', () => {
-        const sut = new Generator({});
-        expect(sut._applyMappers).to.be.a('function');
       });
     });
   });
