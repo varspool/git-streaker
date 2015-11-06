@@ -44,9 +44,9 @@ describe('Schedule command', () => {
 
   const fulfillments = {
     'defaults': {},
-    'jitterAndHours': {
+    'jitterAndHour': {
       jitter: true,
-      hours: '3-9,3',
+      hour:   '3-9,3',
     },
   };
 
