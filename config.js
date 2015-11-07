@@ -10,7 +10,8 @@ const config = {
   linting: debug,
 
   build: {
-    output: output
+    output: output,
+    lcov:   output
   },
 
   js: {

@@ -129,7 +129,7 @@ gulp.task('lint', () => {
     .pipe(gulpif(config.linting, eslint.format()));
 });
 
-gulp.task('test', ['buildCoverage'], () => {
+gulp.task('test', () => {
   mkdirp(config.build.output);
 
   return gulp.src(config.test.tests, {read: false})
@@ -141,7 +141,7 @@ gulp.task('test', ['buildCoverage'], () => {
       ]
     }))
     .pipe(istanbul.writeReports({
-      dir: config.build.lcovOutput,
+      dir: config.build.lcov,
       reporters: [ 'lcov' ],
     }));
 });
