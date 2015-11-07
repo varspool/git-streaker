@@ -1,6 +1,5 @@
 import {Log} from './../../dist/util/log';
 import parse from './../../dist/util/parse';
-import {expect} from 'chai';
 
 Log.setFile('build/parse.log');
 
@@ -43,7 +42,7 @@ describe('module parse', () => {
       expect(parse.range(+'NaN'), 'NaN').to.eql([]);
       expect(parse.range('abc-def'), 'abc-def').to.eql([]);
       expect(parse.range('1-2-3'), 'abc-def').to.eql([]);
-      expect(parse.range('abc', 'hour'), 'null').to.eql([1]);
+      expect(parse.range('abc', 'hour'), 'null').to.eql([]);
     });
 
     it('Copes with invalid date component types', () => {

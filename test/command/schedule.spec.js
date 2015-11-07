@@ -16,7 +16,7 @@ function args(file, merge) {
   }, merge);
 }
 
-describe('Schedule command', () => {
+describe('command Schedule', () => {
   it('is a function', () => {
     expect(schedule).is.a('function'); //
   });

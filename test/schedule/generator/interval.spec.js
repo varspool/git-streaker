@@ -1,6 +1,6 @@
 import generator from './../generator';
 import Interval from './../../../dist/schedule/generator/interval';
 
-describe('class Interval', () => {
+describe('class Generator < Interval', () => {
   generator(Interval);
 });

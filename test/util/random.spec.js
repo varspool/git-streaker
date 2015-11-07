@@ -1,5 +1,4 @@
 import random from './../../dist/util/random';
-import {expect} from 'chai';
 
 describe('module random', () => {
   it('exports an object as the default', () => {

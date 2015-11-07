@@ -1,4 +1,3 @@
-import {expect} from 'chai';
 import Schedule from './../../dist/schedule/schedule';
 import _outfile from './../util/outfile';
 import fs from 'fs';
@@ -6,7 +5,7 @@ import path from 'path';
 
 const outfile = _outfile.bind(undefined, 'schedule');
 
-describe('Schedule value class', () => {
+describe('class Schedule', () => {
   describe('static methods', () => {
     describe('.fromString(string)', () => {
       it('is a static method', () => {
