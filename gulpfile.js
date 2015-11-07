@@ -129,7 +129,7 @@ gulp.task('lint', () => {
     .pipe(gulpif(config.linting, eslint.format()));
 });
 
-gulp.task('test', () => {
+gulp.task('test', ['buildCoverage'], () => {
   mkdirp(config.build.output);
 
   return gulp.src(config.test.tests, {read: false})
