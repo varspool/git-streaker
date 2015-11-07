@@ -1,6 +1,6 @@
 {
   "name": "git-streaker",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A revisionist approach to git history, with filter-branch",
   "preferGlobal": true,
   "main": "dist/git-streaker.js",
