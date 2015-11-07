@@ -34,7 +34,9 @@ describe('module parse', () => {
   });
 
   describe('.dateComponent()', () => {
-
+    it('defaults to hours', () => {
+      expect(parse.dateComponent(25)).to.be.eql(23);
+    });
   });
 
   describe('.range()', () => {

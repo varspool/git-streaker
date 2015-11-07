@@ -17,7 +17,7 @@ describe('class Schedule', () => {
         expect(schedule).to.be.a('object').and.instanceof(Schedule);
       });
 
-      it('throws and error on invalid schedules', () => {
+      it('throws an error on invalid schedules', () => {
         expect(() => {
           Schedule.fromString('{"schedule": null}');
         }).to.throw();
@@ -50,6 +50,13 @@ describe('class Schedule', () => {
         const expected = path.normalize(path.join(__dirname, './../fixture/schedule.json'));
         expect(Schedule.find('./schedule.json', './dist-test/fixture')).to.be.eql(expected);
       });
+    });
+  });
+
+  describe('constructor', () => {
+    it('Copes with no dates being passed', () => {
+      const sut = new Schedule();
+      expect(sut).to.be.an.instanceof(Schedule);
     });
   });
 
