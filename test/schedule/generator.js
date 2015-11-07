@@ -44,6 +44,22 @@ export default (Generator) => {
 
         expect(current).to.be.gt(previous);
       });
+
+      it('avoids returning dates in excluded hours', () => {
+        const sut = new Generator({
+          count: '100',
+          jitter: false,
+          hour: '17-22',
+          start: '2015-01-02T17:00:00.000Z',
+        });
+
+        const dates = sut.generate();
+
+        dates.forEach((date) => {
+          expect(date).to.be.an.instanceof(Date);
+          expect(date.getHours()).to.be.within(17, 22);
+        });
+      });
     });
 
     describe('.generate()', () => {

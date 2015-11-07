@@ -11,7 +11,7 @@ function args(file, merge) {
     interval: '1-10',
     count: 3,
     jitter: false,
-    hours: null,
+    hour: null,
     start: null,
   }, merge);
 }
