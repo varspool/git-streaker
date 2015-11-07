@@ -28,9 +28,8 @@ if you prefer.
 ### Overview
 
 * Run `git streaker schedule schedule.json --type=...` to create a schedule file.
-* Run `git streaker filter -ac schedule.json` to rewrite the dates on all
-  commits in the current branch
-  * Or `git streaker filter -ac schedule.json -- --all` to rewrite all branches
+* Run `git streaker filter -ac schedule.json` to rewrite the dates on the
+  commits in the current branch.
 
 ### Command Line Interface
 
@@ -38,7 +37,7 @@ Get usage information with `--help`, both for `git streaker` itself, and the
 subcommands.  All usages of this tool follow this pattern:
 
 ```sh
-git streaker <subcommand> [options] <schedule-file> [-- filter-branch-options...]
+git streaker <subcommand> [options] <schedule-file>
 ```
 
 You provide a subcommand as the first option.  And with any of the subcommands,
@@ -65,17 +64,18 @@ You can turn boolean options off with `--no-<option>`.
 
 #### Current Schedule Types
 
-* `streak`, which requires a `--start=<date>`, and from there produces a single
-  commit-time, once a day
-  * You can optionally use `--hour=6,7,15-23` to vary the generated time
-* `interval`, which requires a `--start=<date>`, and from there just adds an
-  interval of seconds between commits
-  * You can optionally use `--interval=300-600` and other range specifications
-    to choose a random interval
-  * The default interval is one second
+* `streak` which produces a once-a-day schedule
+* `interval`, which just adds a random interval between commits
+  * You can use `--interval=300-600` to specify the interval, in seconds
+  * The default interval is one second (but see `--jitter` below)
 
-You can use `--jitter` to randomize the minute and second values with any of
-these schedules.
+##### Common Options
+
+* `--start=<date>` (required) the start date for the generated schedule
+* `--jitter` randomizes the commit time slightly, splaying it through the hour
+  after it would have otherwise occurred
+* `--hour=6,7,15-23` causes generated commits to fall within these hours
+  (modulo jitter, above)
 
 #### Usage
 
@@ -86,7 +86,7 @@ Options:
   --verbose, -v  Output more information (provide multiple times for more noise)  [count]
   --quiet, -q    Output less information (provide multiple times for less noise)  [count]
   -f, --force    Allow overwriting the destination file  [boolean] [default: false]
-  --type, -t     The type of schedule to generate  [required] [choices: "streak", "interval"]
+  --type, -t     The type of schedule to generate (a generator name)  [required] [choices: "streak", "interval"]
   --count, -c    The number of commits to generate  [required] [default: 1000]
   --hour         Restrict generated times to these hours  [string]
   --jitter, -j   Randomly generate minute and second information  [boolean] [default: true]
@@ -151,5 +151,5 @@ filter-branch` walks the commit range you give it.
 
 ## Known Limitations
 
-* Timezone information is limited to whatever $TZ says. Would probably need momentjs plus the timezone data to do better,
-  and it'd be awkward.
+* Timezone information is limited to whatever $TZ says. Would probably need
+  momentjs plus the timezone data to do better, and it'd be awkward.
