@@ -23,7 +23,6 @@
   "homepage": "https://github.com/dominics/git-streaker#readme",
   "scripts": {
     "pretest": "npm run build",
-    "prepublish": "npm test",
     "preversion": "npm test",
     "build": "gulp build",
     "test": "gulp test"
