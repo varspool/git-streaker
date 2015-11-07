@@ -52,6 +52,13 @@ describe('Schedule command', () => {
       jitter: true,
       hour: '22-23,1-9',
     },
+    'interval': {
+      type: 'interval',
+      jitter: true,
+      interval: '300-3000',
+      hour: '18-23',
+      start: '2015-08-06',
+    },
     'emptyHour': {
       jitter: true,
       hour:   '',
